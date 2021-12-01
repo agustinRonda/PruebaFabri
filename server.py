@@ -10,7 +10,7 @@ API_BASE_URL = "https://pokeapi.co/api/v2"
 HEADER = 16
 PORT = 8080
 FORMAT = 'utf-8'
-IPV4 = '192.168.0.76'                  #socket.gethostbyname(socket.gethostname())
+IPV4 = '192.168.2.138'                  #socket.gethostbyname(socket.gethostname())
 ADDR = (IPV4, PORT)
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

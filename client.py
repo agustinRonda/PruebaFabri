@@ -1,13 +1,17 @@
 import socket
 import json
-import machine
-import st7789
+import colorama
+from colorama import Fore
+
 
 PORT = 8080
-IPV4 = '192.168.0.76'
+IPV4 = '192.168.2.138'
 FORMAT = 'UTF-8'
 HEADER = 16
 DISPLAY_DIMENSION = (240, 240)
+
+def colored(r, g, b, text):
+    return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
 def send_msg(client, msg, header):
     client.send(header.encode(FORMAT))      #Enviar largo del mensaje del cliente
@@ -56,16 +60,20 @@ for i in range(int(image_info_json['height'])):
         break
 
 if show_image:
-    spi = machine.SPI(1, baudrate=40000000, polarity=1)
-    display = st7789.ST7789(spi, 240, 240, reset=machine.Pin(23, machine.Pin.OUT), dc=machine.Pin(22, machine.Pin.OUT))
-    display.init()
 
-    inicio_x = round((DISPLAY_DIMENSION - image_info_json['width']) / 2)
-    inicio_y = round((DISPLAY_DIMENSION - image_info_json['height']) / 2)
+    inicio_x = round((DISPLAY_DIMENSION[0] - image_info_json['width']) / 2)
+    inicio_y = round((DISPLAY_DIMENSION[1] - image_info_json['height']) / 2)
 
-    for i in range(len(rows)):
-        for j in range(len(rows[i])):
-            color = color565(rows[i][j][0], rows[i][j][1], rows[i][j][2])
-            ST7789.pixel(inicio_x + j, inicio_y + i, color)
+    for row in rows:
+        # print(row['row'][0])
+        for i in range(len(row['row'])):
 
-# https://github.com/devbis/st7789_mpy/
+            pixel = row['row'][i]
+
+            text = '█'
+            colored_text = colored(pixel[0], pixel[1], pixel[2], text)
+            
+            if i == (len(row['row']) - 1):
+                print(colored_text)
+            else:
+                print(colored_text, end='')
